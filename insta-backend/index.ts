@@ -1,36 +1,11 @@
-const { PrismaClient } = require("@prisma/client");
-const { ApolloServer, gql } = require('apollo-server');
 
-const client = new PrismaClient();
+import { ApolloServer } from 'apollo-server';
+import schema from "./schema";
 // The GraphQL schema
-const typeDefs = gql`
-  type Movie {
-    id: Int
-    title: String
-    year: Int
-    genre: String
-    createdAt: String
-    udpatedAt: String
-  }
-  type Query {
-    movie: Movie
-    movies: [Movie]
-  }
-`;
 
-// A map of functions which return data for the schema.
-const resolvers = {
-  Query: {
-    movies: () => client.movie.findMany(),
-    movie: () => ({ title: "Hello", year: 2021 }),
-  },
-};
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-});
+const server = new ApolloServer({schema});
 
-server.listen().then(({ url }) => {
-  console.log(`🚀 Server ready at ${url}`);
+server.listen().then((pt:{ url:string }) => {
+  console.log(`🚀 Server ready at ${pt.url}`);
 });
