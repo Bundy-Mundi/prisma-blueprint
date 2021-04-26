@@ -8,23 +8,27 @@ const mutation: IResolvers = {
         createAccount: async(_, 
                 { firstName, lastName, username, email, password }
             ) => {
-                const existingUser = await client.user.findFirst({
-                    where:{
-                        OR: [{ // if there is same username
-                                username
-                            },
-                            { // or same email
-                                email
-                            }]
-                        }
-                    })
-                // Check if username exists
-                // hash password
-                // save and return the user
-            console.log(existingUser)
-            if(!existingUser){
-                password = await bcrypt.hash(password, SALT);
-                return client.user.create({data:{firstName, lastName, username, email, password}});
+                try {
+                    const existingUser = await client.user.findFirst({
+                        where:{
+                            OR: [{ // if there is same username
+                                    username
+                                },
+                                { // or same email
+                                    email
+                                }]
+                            }
+                        })
+                    // Check if username exists
+                    // hash password
+                    // save and return the user
+                    if(existingUser){
+                        throw new Error("The username/email is already taken");
+                    }
+                    password = await bcrypt.hash(password, SALT);
+                    return client.user.create({data:{firstName, lastName, username, email, password}});
+                } catch (error) {
+                    return error;
             }
         }
     }
