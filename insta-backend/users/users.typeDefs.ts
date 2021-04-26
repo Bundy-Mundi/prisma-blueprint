@@ -11,6 +11,11 @@ export const typeDefs = gql`
     createdAt : String!
     updatedAt : String!
   }
+  type LoginResult {
+    ok: Boolean!
+    token: String # Optional
+    error: String
+  }
   type Query {
     seeProfile(username:String): User
   }
@@ -22,5 +27,6 @@ export const typeDefs = gql`
       email     : String!
       password  : String!
     ): User
+    login(username:String!, password: String!):LoginResult
   }
 `;
