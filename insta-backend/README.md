@@ -1,2 +1,1 @@
-# Instagram Clone Backend
-
+# Prisma Backend

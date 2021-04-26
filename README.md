@@ -20,13 +20,4 @@
 
 ### `.env` Contents
 
-<<<<<<< HEAD
 - `DATABASE_URL`: This is required to connect `postgresql` to Prisma
-=======
-### Backend 
-
-- [X] Create Account
-- [X] See Profile
-- [X] Login
-- [ ] Edit Profile
->>>>>>> 0e0b77d349d4cf66c2d646c7c08f78d65333ba0d
