@@ -14,6 +14,9 @@
 
 ## Progress
 
-- [ ] Create Account
-- [ ] See Profile
-- [ ] Login
+### Backend 
+
+- [X] Create Account
+- [X] See Profile
+- [X] Login
+- [ ] Edit Profile
