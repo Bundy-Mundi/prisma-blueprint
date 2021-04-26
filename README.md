@@ -1,6 +1,10 @@
-# Instagram Clone 3.0
+# Prisma Blueprint
 
 ## Stacks
+
+### Frontend
+
+### Backend
 
 - prisma
 
@@ -10,10 +14,10 @@
 
 ## Environment Variable
 
-- `DATABASE_URL`: This is required to connect `postgresql` to `prisma`
+### Installation
 
-## Progress
+- Create `.env` file in your project root folder
 
-- [ ] Create Account
-- [ ] See Profile
-- [ ] Login
+### `.env` Contents
+
+- `DATABASE_URL`: This is required to connect `postgresql` to Prisma
