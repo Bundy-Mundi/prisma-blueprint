@@ -3,9 +3,7 @@ import { IResolvers } from "apollo-server";
 import { ITypeDefinitions, makeExecutableSchema, mergeResolvers, mergeTypeDefs } from "graphql-tools";
 
 const loadedTypes = loadFilesSync(`${__dirname}/**/*.typeDefs.ts`);
-const loadedResolvers = loadFilesSync(
-    `${__dirname}/**/*.{queries,mutations}.ts`
-);
+const loadedResolvers = loadFilesSync(`${__dirname}/**/*.resolvers.ts`);
 
 const typeDefs:ITypeDefinitions = mergeTypeDefs(loadedTypes);
 const resolvers:IResolvers = mergeResolvers(loadedResolvers);

@@ -3,10 +3,11 @@ import { IResolvers } from "apollo-server";
 
 // A map of functions which return data for the schema.
 const query: IResolvers = {
-  Query: {
-    movies: () => client.movie.findMany(),
-    movie: (_, { id }) => client.movie.findUnique({where:{id}}),
-  }
+    Query: {
+        user: (_, {username}) => client.user.findUnique({ where: 
+            { username }}
+        )
+    }
 };
 
 export default query;
