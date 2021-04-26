@@ -1,36 +1,11 @@
 import { IResolvers } from "apollo-server";
-import client from "../client";
+import client from "../../client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const SALT = 10;
 const secret = process.env.SECRET || 'SECRET'; // NEVER use 'SECRET' for production mode
-const mutation: IResolvers = {
+const resolvers: IResolvers = {
     Mutation: {
-        createAccount: async(_, 
-                { firstName, lastName, username, email, password }
-            ) => {
-                try {
-                    const existingUser = await client.user.findFirst({
-                        where:{
-                            OR: [
-                                    { username },
-                                    { email }
-                                ]
-                            }
-                        })
-                    // Check if username exists
-                    // hash password
-                    // save and return the user
-                    if(existingUser){
-                        throw new Error("The username/email is already taken");
-                    }
-                    password = await bcrypt.hash(password, SALT);
-                    return client.user.create({data:{firstName, lastName, username, email, password}});
-                } catch (error) {
-                    return error;
-            }
-        },
         login: async(_, { username, password }) => {
             // find user with args.useranem
             // check password with args.password
@@ -57,7 +32,6 @@ const mutation: IResolvers = {
                     }
                 }
                 // Step 3 generate web token and save it
-
                 const token = await jwt.sign({id: user.id}, secret);
                 return {
                     ok: passwordOK,
@@ -66,9 +40,8 @@ const mutation: IResolvers = {
             } catch (error) {
                 console.log(error);
             }
-
         },
     }
 }
 
-export default mutation;
+export default resolvers;

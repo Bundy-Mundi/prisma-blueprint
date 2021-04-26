@@ -11,22 +11,7 @@ export const typeDefs = gql`
     createdAt : String!
     updatedAt : String!
   }
-  type LoginResult {
-    ok: Boolean!
-    token: String # Optional
-    error: String
-  }
   type Query {
-    seeProfile(username:String): User
-  }
-  type Mutation {
-    createAccount(
-      firstName : String!
-      lastName  : String
-      username  : String!
-      email     : String!
-      password  : String!
-    ): User
-    login(username:String!, password: String!):LoginResult
+    user(username:String): User
   }
 `;
