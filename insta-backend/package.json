@@ -22,6 +22,7 @@
   "scripts": {
     "dev": "nodemon --exec npx ts-node index.ts",
     "migrate": "npx prisma migrate dev --name init",
+    "studio": "npx prisma studio",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
