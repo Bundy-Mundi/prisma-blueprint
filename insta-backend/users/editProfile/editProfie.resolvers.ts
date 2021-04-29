@@ -1,6 +1,6 @@
 require('dotenv').config();
 import { IResolvers } from "apollo-server";
-import { BasicReturnType } from "../users.types";
+import { BasicReturnType, JWType } from "../users.types";
 import client from "../../client";
 import bycrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -15,6 +15,7 @@ type EditProfileProp = {
     password : PreventNull
     token: PreventNull
 }
+
 
 const SECRET = process.env.SECRET || 'secret';
 
@@ -32,8 +33,7 @@ const EditProfileMutation: IResolvers = {
                 if(!token)
                     throw new Error("No token provided.");
                 
-                const isToken = await jwt.verify(token, SECRET);
-                console.log(isToken)
+                const verifiedToken = <JWType>await jwt.verify(token, SECRET);
 
                 if(username===null || email===null){
                     throw new Error("Wrong approach. Username and email cannot be 'null'.");
@@ -67,7 +67,8 @@ const EditProfileMutation: IResolvers = {
                     } else if(doesEmailExist){
                         throw new Error("The same email exists. Try others.")
                     }
-                    client.user.update({where:{token}, data:{username, email, password, firstName, lastName}});
+                    if(typeof verifiedToken === 'object')
+                        client.user.update({where:{id: verifiedToken.id}, data:{username, email, password, firstName, lastName}});
                 }
                 return {
                     ok: true
