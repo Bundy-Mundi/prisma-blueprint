@@ -1,22 +1,20 @@
 require('dotenv').config();
 import { IResolvers } from "apollo-server";
-import { BasicReturnType, JWType } from "../users.types";
+import { BasicReturnType } from "../users.types";
+import { checkUndefined, checkType, checkNull, removeWhitespaces } from "../users.utils";
 import client from "../../client";
 import bycrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 
-type PreventNull = string | null;
+type Undefinable = string | undefined;
 
 type EditProfileProp = {
-    firstName: PreventNull
-    lastName: PreventNull
-    username: PreventNull
-    email: PreventNull
-    password : PreventNull
-    token: PreventNull
+    firstName: Undefinable
+    lastName: Undefinable
+    username: Undefinable
+    email: Undefinable
+    password : Undefinable
+    token: Undefinable
 }
-
-const SECRET = process.env.SECRET || 'secret';
 
 const EditProfileMutation: IResolvers = {
     Mutation: {
@@ -25,50 +23,39 @@ const EditProfileMutation: IResolvers = {
             lastName,
             username,
             email,
-            password,
-            token
-        }: EditProfileProp):Promise<BasicReturnType> => {
-            try { // Make sure to catch 'null' only
-                if(!token)
-                    throw new Error("No token provided.");
-                
-                const verifiedToken = <JWType>await jwt.verify(token, SECRET);
+            password
+        }: EditProfileProp, 
+        { currentUser, isLoggedIn } // context
+        ): Promise<BasicReturnType> => {
+            try {
+                const argArray = [ firstName, lastName, username, email, password ];
+                const salt = process.env.SALT || 10;
+                const isNull = checkNull(argArray);
+                const isType = checkType(argArray, 'string');
 
-                if(username===null || email===null){
-                    throw new Error("Wrong approach. Username and email cannot be 'null'.");
-                }
-                else if(password===null){
-                    throw new Error("Wrong approach. You can't have an empty password.");
-                }
-                // Check if there is the same username or email
-                // firstName & lastName can be undefined
-                // password has to be more than 8 characters
-                if(username!=null && email!=null && password!=null){
-                    const salt = process.env.SALT || 10;
-                    username = username.trim().replace(/\s/g, ''); // Remove whitespace
-                    password = password.trim().replace(/\s/g, ''); // Remove whitespace
-                    password = await bycrypt.hash(password, salt); // Hash Password
+                isLoggedIn(currentUser);
+                if(isNull)
+                    throw new Error("Wrong approach. Arguments cannot be 'null'.");
+                if(isType)
+                    throw new Error("Wrong input. Arguments must be 'string'.");
+                if(await client.user.findUnique({where:{username}}))
+                    throw new Error("The same username exists. Try others.");
+                if(await client.user.findUnique({where:{email}}))
+                    throw new Error("The same email exists. Try others.");
 
-                    // If firstName & lastName  are null | undefined alsways give them a empty string
-                    if(firstName && lastName){
-                        firstName = firstName.trim();
-                        lastName = lastName.trim();
-                    } else {
-                        firstName = "";
-                        lastName = "";
-                    }
+                // Remove White Spaces for inputs
+                username = removeWhitespaces(username);
+                password = removeWhitespaces(password);
+                email = removeWhitespaces(email);
+                firstName = removeWhitespaces(firstName);
+                lastName = removeWhitespaces(lastName);
 
-                    // Check recurrings
-                    const doesUserExist = await client.user.findUnique({where:{username}});
-                    const doesEmailExist = await client.user.findUnique({where:{email}});
-                    if(doesUserExist){
-                        throw new Error("The same username exists. Try others.")
-                    } else if(doesEmailExist){
-                        throw new Error("The same email exists. Try others.")
-                    }
-                    if(typeof verifiedToken === 'object')
-                        client.user.update({where:{id: verifiedToken.id}, data:{username, email, password, firstName, lastName}});
-                }
+                // Hash Password
+                if(checkUndefined([ password ]))
+                    password = await bycrypt.hash(password, salt); 
+
+                // update user
+                client.user.update({where:{id: currentUser.id}, data:{username, email, password, firstName, lastName}});
                 return {
                     ok: true
                 }
