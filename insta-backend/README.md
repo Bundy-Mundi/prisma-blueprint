@@ -1,5 +1,13 @@
 # Instagram Clone Backend
 
+## Progress
+
+- [X] Create Account
+- [X] See Profile
+- [X] Login
+- [X] Edit Profile
+- [] Basic Authentication
+
 ## Get started
 
 ### Installation only for backend
