@@ -1,7 +1,9 @@
 require('dotenv').config();
 import { IResolvers } from "apollo-server";
+import { BasicReturnType } from "../users.types";
 import client from "../../client";
 import bycrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 type AllowUndefined = string | undefined | null;
 
@@ -20,7 +22,7 @@ const EditProfileMutation: IResolvers = {
             lastName,
             username,
             email,
-            password 
+            password
         }: EditProfileProp):Promise<BasicReturnType> => {
             try {
                 if(!username && !email){
