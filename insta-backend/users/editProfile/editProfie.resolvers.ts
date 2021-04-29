@@ -5,15 +5,18 @@ import client from "../../client";
 import bycrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-type AllowUndefined = string | undefined | null;
+type PreventNull = string | null;
 
 type EditProfileProp = {
-    firstName: AllowUndefined
-    lastName: AllowUndefined
-    username: AllowUndefined
-    email: AllowUndefined
-    password : AllowUndefined
+    firstName: PreventNull
+    lastName: PreventNull
+    username: PreventNull
+    email: PreventNull
+    password : PreventNull
+    token: PreventNull
 }
+
+const SECRET = process.env.SECRET || 'secret';
 
 const EditProfileMutation: IResolvers = {
     Mutation: {
@@ -22,19 +25,26 @@ const EditProfileMutation: IResolvers = {
             lastName,
             username,
             email,
-            password
+            password,
+            token
         }: EditProfileProp):Promise<BasicReturnType> => {
-            try {
-                if(!username && !email){
+            try { // Make sure to catch 'null' only
+                if(!token)
+                    throw new Error("No token provided.");
+                
+                const isToken = await jwt.verify(token, SECRET);
+                console.log(isToken)
+
+                if(username===null || email===null){
                     throw new Error("Wrong approach. Username and email cannot be 'null'.");
                 }
-                else if(!password){
+                else if(password===null){
                     throw new Error("Wrong approach. You can't have an empty password.");
                 }
                 // Check if there is the same username or email
                 // firstName & lastName can be undefined
                 // password has to be more than 8 characters
-                if(username && email && password){
+                if(username!=null && email!=null && password!=null){
                     const salt = process.env.SALT || 10;
                     username = username.trim().replace(/\s/g, ''); // Remove whitespace
                     password = password.trim().replace(/\s/g, ''); // Remove whitespace
@@ -57,7 +67,7 @@ const EditProfileMutation: IResolvers = {
                     } else if(doesEmailExist){
                         throw new Error("The same email exists. Try others.")
                     }
-                    client.user.update({where:{username, email}, data:{username, email, password, firstName, lastName}});
+                    client.user.update({where:{token}, data:{username, email, password, firstName, lastName}});
                 }
                 return {
                     ok: true
