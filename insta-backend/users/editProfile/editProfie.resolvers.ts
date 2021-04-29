@@ -16,7 +16,6 @@ type EditProfileProp = {
     token: PreventNull
 }
 
-
 const SECRET = process.env.SECRET || 'secret';
 
 const EditProfileMutation: IResolvers = {
