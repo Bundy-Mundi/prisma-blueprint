@@ -14,6 +14,8 @@ type EditProfileProp = {
     email: Undefinable
     password : Undefinable
     token: Undefinable
+    bio: Undefinable
+    avatar: Undefinable
 }
 
 const EditProfileMutation: IResolvers = {
@@ -23,7 +25,9 @@ const EditProfileMutation: IResolvers = {
             lastName,
             username,
             email,
-            password
+            password,
+            bio,
+            avatar
         }: EditProfileProp, 
         { currentUser, isLoggedIn } // context
         ): Promise<BasicReturnType> => {

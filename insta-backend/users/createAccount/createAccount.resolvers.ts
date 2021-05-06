@@ -11,7 +11,7 @@ if(process.env.SALT !== undefined)
 const createAccountResolvers: IResolvers = {
     Mutation: {
         createAccount: async(_,
-                { firstName, lastName, username, email, password }
+                { firstName, lastName, username, email, password, bio, avatar }
             ): Promise<BasicReturnType> => {
                 try {
                     const existingUser = await client.user.findFirst({
@@ -36,8 +36,7 @@ const createAccountResolvers: IResolvers = {
                         throw new Error("The password has to be at least 8 letters");
 
                     password = await bcrypt.hash(password, salt);
-                    await client.user.create({data:{firstName, lastName, username, email, password}});
-
+                    await client.user.create({data:{firstName, lastName, username, email, password, bio, avatar}});
                     return {
                         ok: true
                     }

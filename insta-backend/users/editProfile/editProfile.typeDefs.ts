@@ -12,6 +12,8 @@ export const typeDefs = gql`
         username:  String
         email:     String
         password:  String
+        bio:       String
+        avatar:    String
       ):EditProfileResult!
   }
 `;

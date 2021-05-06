@@ -10,8 +10,10 @@ export default gql`
             firstName : String!
             lastName  : String
             username  : String!
-            email     : String
+            email     : String!
             password  : String!
+            bio       : String
+            avatar    : String
         ): CreateAccountResult
     }
 `;

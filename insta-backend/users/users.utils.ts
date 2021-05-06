@@ -51,7 +51,7 @@ export const checkType = (arr: Array<any>, type: string): boolean => {
     return true;
 }
 
-export const removeWhitespaces = (str: string | undefined) => {
+export const removeWhitespaces = (str: string | undefined): string | undefined => {
     if(typeof str === 'string')
         return str.trim().replace(/\s/g, '');
     return undefined;
