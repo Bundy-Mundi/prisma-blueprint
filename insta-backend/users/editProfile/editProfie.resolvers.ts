@@ -59,7 +59,7 @@ const EditProfileMutation: IResolvers = {
                     password = await bycrypt.hash(password, salt); 
 
                 // update user
-                await client.user.update({where:{id: currentUser.id}, data:{username, email, password, firstName, lastName}});
+                await client.user.update({where:{id: currentUser.id}, data:{username, email, password, firstName, lastName, bio, avatar}});
                 return {
                     ok: true
                 }

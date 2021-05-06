@@ -6,7 +6,8 @@
 - [X] See Profile
 - [X] Login
 - [X] Edit Profile
-- [] Basic Authentication
+- [X] Basic Authentication
+- [ ] Upload Files
 
 ## Get started
 
