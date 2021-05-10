@@ -34,7 +34,6 @@ const EditProfileMutation: IResolvers = {
         { currentUser, isLoggedIn } // context
         ): Promise<BasicReturnType> => {
             try {
-                
                 const { filename, createReadStream } = await avatar;
                 const readStream = createReadStream();
                 const writeStream = fs.createWriteStream(process.cwd() + '\\uploads\\' + filename);
