@@ -4,6 +4,7 @@ import { BasicReturnType } from "../users.types";
 import { saveAvatarDemo, removeWhitespaces } from "../users.utils";
 import client from "../../client";
 import bcrypt from "bcrypt";
+import { User } from "@prisma/client";
 
 let salt: number = 10;
 if(process.env.SALT !== undefined)
@@ -15,7 +16,8 @@ const createAccountResolvers: IResolvers = {
                 { firstName, lastName, username, email, password, bio, avatar }
             ): Promise<BasicReturnType> => {
                 try {
-                    const existingUser = await client.user.findFirst({
+                    let avatar_url:string = "";
+                    const existingUser:User|null = await client.user.findFirst({
                         where:{
                             OR: [
                                     { username },
@@ -42,10 +44,9 @@ const createAccountResolvers: IResolvers = {
                         throw new Error("The password has to be at least 8 letters");
 
                     password = await bcrypt.hash(password, salt);
-                    const { id } = await client.user.create({data:{firstName, lastName, username, email, password, bio}});
+                    const { id } = await client.user.create({data:{firstName, lastName, username, email, password, bio, avatar: avatar_url}});
                     if(avatar)
-                        saveAvatarDemo(avatar, id);
-                    // Need to update avatar field later
+                        avatar_url = await saveAvatarDemo(avatar, id);
                     return {
                         ok: true
                     }

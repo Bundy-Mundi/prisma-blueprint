@@ -34,10 +34,9 @@ const EditProfileMutation: IResolvers = {
         { currentUser, isLoggedIn } // context
         ): Promise<BasicReturnType> => {
             try {
+                let avatar_url:string = "";
                 isLoggedIn(currentUser);
-                
-                if(avatar)
-                    saveAvatarDemo(avatar, currentUser.id);
+
                 const argArray = [ firstName, lastName, username, email, password ];
                 const salt = process.env.SALT || 10;
                 const isNull = checkNull(argArray);
@@ -63,8 +62,13 @@ const EditProfileMutation: IResolvers = {
                 if(checkUndefined([ password ]))
                     password = await bycrypt.hash(password, salt); 
 
+                // Update avatar
+                if(avatar)
+                    avatar_url = await saveAvatarDemo(avatar, currentUser.id);
+                console.log(avatar_url);
+
                 // update user
-                await client.user.update({where:{id: currentUser.id}, data:{username, email, password, firstName, lastName, bio}});
+                await client.user.update({where:{id: currentUser.id}, data:{username, email, password, firstName, lastName, bio, avatar: avatar_url}});
                 return {
                     ok: true
                 }

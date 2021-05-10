@@ -59,9 +59,27 @@ export const removeWhitespaces = (str: string | undefined): string | undefined =
     return undefined;
 };
 
-export const saveAvatarDemo = async(avatar: FileUpload, userID:string) => {
+export const saveAvatarDemo = async(avatar: FileUpload, userId:string|number):Promise<string> => {
+    try {
+        
+    
     const { filename, createReadStream } = await avatar;
+    
+    const serverpath = process.env.STATIC_PATH || `http://localhost:${process.env.PORT ? process.env.PORT : "4000"}`;
+    const dirpath = `${process.cwd()}\\uploads\\${userId}`;
+    const filepath = `${userId}\\${Date.now()}-${filename}`;
+    const staticpath = `${serverpath}\\static\\${filepath}`;
+
+    fs.mkdirSync(dirpath, { recursive: true });
     const readStream = createReadStream();
-    const writeStream = fs.createWriteStream(process.cwd() + '\\uploads\\' + userID + Date.now() + filename);
+    const writeStream = fs.createWriteStream("uploads\\" + filepath);
+
     readStream.pipe(writeStream);
+    return staticpath;
+
+    } catch (error) {
+        console.log(error)
+        return error
+    }
+    
 }

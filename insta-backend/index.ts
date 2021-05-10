@@ -1,6 +1,7 @@
 require('dotenv').config();
 import express from "express";
 import logger from "morgan";
+import path from "path";
 import { ApolloServer } from 'apollo-server-express';
 import { typeDefs, resolvers } from "./schema";
 import { getUser, isLoggedIn } from './users/users.utils';
@@ -12,7 +13,7 @@ const server = new ApolloServer({
   typeDefs, 
   resolvers,
   context: async({req}) => {
-    const user:User = await getUser(<string>req.headers.authorization);
+    const user:User|null = await getUser(<string>req.headers.authorization);
     return {
       currentUser: user,
       isLoggedIn 
@@ -21,7 +22,7 @@ const server = new ApolloServer({
 });
 const app = express();
 app.use(logger('tiny'));
-app.use("/static", express.static("uploads"));
+app.use("/static", express.static(path.join(__dirname, 'uploads')));
 server.applyMiddleware({ app });
 
 app.listen({ port: PORT }, () => {
