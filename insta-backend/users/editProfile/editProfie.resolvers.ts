@@ -34,14 +34,15 @@ const EditProfileMutation: IResolvers = {
         { currentUser, isLoggedIn } // context
         ): Promise<BasicReturnType> => {
             try {
+                isLoggedIn(currentUser);
+                
                 if(avatar)
-                    saveAvatarDemo(avatar);
+                    saveAvatarDemo(avatar, currentUser.id);
                 const argArray = [ firstName, lastName, username, email, password ];
                 const salt = process.env.SALT || 10;
                 const isNull = checkNull(argArray);
                 const isType = checkType(argArray, 'string');
 
-                isLoggedIn(currentUser);
                 if(isNull)
                     throw new Error("Wrong approach. Arguments cannot be 'null'.");
                 if(isType)

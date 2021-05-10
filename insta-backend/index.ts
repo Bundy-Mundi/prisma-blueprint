@@ -4,6 +4,7 @@ import logger from "morgan";
 import { ApolloServer } from 'apollo-server-express';
 import { typeDefs, resolvers } from "./schema";
 import { getUser, isLoggedIn } from './users/users.utils';
+import { User } from "@prisma/client";
 
 // The GraphQL schema
 const PORT = process.env.PORT || 4000;
@@ -11,7 +12,7 @@ const server = new ApolloServer({
   typeDefs, 
   resolvers,
   context: async({req}) => {
-    const user = await getUser(<string>req.headers.authorization)
+    const user:User = await getUser(<string>req.headers.authorization);
     return {
       currentUser: user,
       isLoggedIn 

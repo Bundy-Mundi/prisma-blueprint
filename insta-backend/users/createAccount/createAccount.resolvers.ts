@@ -42,9 +42,10 @@ const createAccountResolvers: IResolvers = {
                         throw new Error("The password has to be at least 8 letters");
 
                     password = await bcrypt.hash(password, salt);
+                    const { id } = await client.user.create({data:{firstName, lastName, username, email, password, bio}});
                     if(avatar)
-                        saveAvatarDemo(avatar);
-                    await client.user.create({data:{firstName, lastName, username, email, password, bio, avatar}});
+                        saveAvatarDemo(avatar, id);
+                    // Need to update avatar field later
                     return {
                         ok: true
                     }

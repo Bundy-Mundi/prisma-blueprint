@@ -59,9 +59,9 @@ export const removeWhitespaces = (str: string | undefined): string | undefined =
     return undefined;
 };
 
-export const saveAvatarDemo = async(avatar: FileUpload) => {
+export const saveAvatarDemo = async(avatar: FileUpload, userID:string) => {
     const { filename, createReadStream } = await avatar;
     const readStream = createReadStream();
-    const writeStream = fs.createWriteStream(process.cwd() + '\\uploads\\' + filename);
+    const writeStream = fs.createWriteStream(process.cwd() + '\\uploads\\' + userID + Date.now() + filename);
     readStream.pipe(writeStream);
 }
