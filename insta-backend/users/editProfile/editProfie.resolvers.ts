@@ -2,7 +2,7 @@ require('dotenv').config();
 import fs from "fs";
 import { IResolvers } from "apollo-server-express";
 import { BasicReturnType } from "../users.types";
-import { checkUndefined, checkType, checkNull, removeWhitespaces } from "../users.utils";
+import { checkUndefined, checkType, checkNull, removeWhitespaces, saveAvatarDemo } from "../users.utils";
 import client from "../../client";
 import bycrypt from "bcrypt";
 import { FileUpload } from "@apollographql/graphql-upload-8-fork";
@@ -34,11 +34,8 @@ const EditProfileMutation: IResolvers = {
         { currentUser, isLoggedIn } // context
         ): Promise<BasicReturnType> => {
             try {
-                const { filename, createReadStream } = await avatar;
-                const readStream = createReadStream();
-                const writeStream = fs.createWriteStream(process.cwd() + '\\uploads\\' + filename);
-                readStream.pipe(writeStream);
-                
+                if(avatar)
+                    saveAvatarDemo(avatar);
                 const argArray = [ firstName, lastName, username, email, password ];
                 const salt = process.env.SALT || 10;
                 const isNull = checkNull(argArray);

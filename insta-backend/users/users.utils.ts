@@ -1,8 +1,10 @@
 require("dotenv").config();
 import { User } from "@prisma/client";
+import { JWType } from "./users.types";
+import { FileUpload } from "@apollographql/graphql-upload-8-fork";
+import fs from "fs";
 import jwt from "jsonwebtoken"
 import client from "../client";
-import { JWType } from "./users.types";
 
 export const secret = process.env.SECRET || 'secret';
 
@@ -56,3 +58,10 @@ export const removeWhitespaces = (str: string | undefined): string | undefined =
         return str.trim().replace(/\s/g, '');
     return undefined;
 };
+
+export const saveAvatarDemo = async(avatar: FileUpload) => {
+    const { filename, createReadStream } = await avatar;
+    const readStream = createReadStream();
+    const writeStream = fs.createWriteStream(process.cwd() + '\\uploads\\' + filename);
+    readStream.pipe(writeStream);
+}
