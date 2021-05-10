@@ -1,4 +1,5 @@
 require('dotenv').config();
+import express from "express";
 import { ApolloServer } from 'apollo-server';
 import { typeDefs, resolvers } from "./schema";
 import { getUser, isLoggedIn } from './users/users.utils';
