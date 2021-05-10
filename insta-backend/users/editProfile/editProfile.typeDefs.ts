@@ -13,7 +13,7 @@ export const typeDefs = gql`
         email:     String
         password:  String
         bio:       String
-        avatar:    String
+        avatar:    Upload
       ):EditProfileResult!
   }
 `;

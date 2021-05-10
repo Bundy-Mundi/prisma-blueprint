@@ -1,9 +1,11 @@
 require('dotenv').config();
+import fs from "fs";
 import { IResolvers } from "apollo-server";
 import { BasicReturnType } from "../users.types";
 import { checkUndefined, checkType, checkNull, removeWhitespaces } from "../users.utils";
 import client from "../../client";
 import bycrypt from "bcrypt";
+import { FileUpload } from "@apollographql/graphql-upload-8-fork";
 
 type Undefinable = string | undefined;
 
@@ -15,7 +17,7 @@ type EditProfileProp = {
     password : Undefinable
     token: Undefinable
     bio: Undefinable
-    avatar: Undefinable
+    avatar: FileUpload
 }
 
 const EditProfileMutation: IResolvers = {
@@ -32,6 +34,12 @@ const EditProfileMutation: IResolvers = {
         { currentUser, isLoggedIn } // context
         ): Promise<BasicReturnType> => {
             try {
+                
+                const { filename, createReadStream } = await avatar;
+                const readStream = createReadStream();
+                const writeStream = fs.createWriteStream(process.cwd() + '\\uploads\\' + filename);
+                readStream.pipe(writeStream);
+                
                 const argArray = [ firstName, lastName, username, email, password ];
                 const salt = process.env.SALT || 10;
                 const isNull = checkNull(argArray);
@@ -42,9 +50,9 @@ const EditProfileMutation: IResolvers = {
                     throw new Error("Wrong approach. Arguments cannot be 'null'.");
                 if(isType)
                     throw new Error("Wrong input. Arguments must be 'string'.");
-                if(await client.user.findUnique({where:{username}}))
+                if(username && await client.user.findUnique({where:{username}}))
                     throw new Error("The same username exists. Try others.");
-                if(await client.user.findUnique({where:{email}}))
+                if(email && await client.user.findUnique({where:{email}}))
                     throw new Error("The same email exists. Try others.");
 
                 // Remove White Spaces for inputs
@@ -59,7 +67,7 @@ const EditProfileMutation: IResolvers = {
                     password = await bycrypt.hash(password, salt); 
 
                 // update user
-                await client.user.update({where:{id: currentUser.id}, data:{username, email, password, firstName, lastName, bio, avatar}});
+                await client.user.update({where:{id: currentUser.id}, data:{username, email, password, firstName, lastName, bio}});
                 return {
                     ok: true
                 }

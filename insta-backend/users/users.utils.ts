@@ -12,7 +12,7 @@ export const getUser = async(token: string) => {
             return null;
         const { id } = <JWType>await jwt.verify(token, secret);
         const user = await client.user.findUnique({where:{id}});
-        if (user)
+        if(user)
             return user;
         else 
             return null;

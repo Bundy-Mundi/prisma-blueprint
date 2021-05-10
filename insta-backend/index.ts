@@ -1,14 +1,16 @@
 require('dotenv').config();
 import { ApolloServer } from 'apollo-server';
-import schema from "./schema";
+import { typeDefs, resolvers } from "./schema";
 import { getUser, isLoggedIn } from './users/users.utils';
 // The GraphQL schema
 const PORT = process.env.PORT || 4000;
 const server = new ApolloServer({ 
-  schema, 
+  typeDefs, 
+  resolvers,
   context: async({req}) => {
+    const user = await getUser(<string>req.headers.authorization)
     return {
-      currentUser: await getUser(<string>req.headers.token),
+      currentUser: user,
       isLoggedIn 
     }
   }
