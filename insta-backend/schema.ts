@@ -1,5 +1,5 @@
 import { loadFilesSync } from "@graphql-tools/load-files";
-import { IResolvers } from "apollo-server";
+import { IResolvers } from "apollo-server-express";
 import { DocumentNode } from "graphql";
 import { mergeResolvers, mergeTypeDefs } from "graphql-tools";
 

@@ -1,4 +1,4 @@
-import { IResolvers } from "apollo-server";
+import { IResolvers } from "apollo-server-express";
 import client from "../../client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";

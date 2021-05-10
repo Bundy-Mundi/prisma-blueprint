@@ -1,6 +1,6 @@
 require('dotenv').config();
 import fs from "fs";
-import { IResolvers } from "apollo-server";
+import { IResolvers } from "apollo-server-express";
 import { BasicReturnType } from "../users.types";
 import { checkUndefined, checkType, checkNull, removeWhitespaces } from "../users.utils";
 import client from "../../client";

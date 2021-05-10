@@ -1,5 +1,5 @@
 require('dotenv').config();
-import { IResolvers } from "apollo-server";
+import { IResolvers } from "apollo-server-express";
 import { BasicReturnType } from "../users.types";
 import client from "../../client";
 import bcrypt from "bcrypt";
