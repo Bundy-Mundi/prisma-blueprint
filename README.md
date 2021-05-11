@@ -1,23 +1,16 @@
 # Prisma Blueprint
 
-## Stacks
+## This project is inspired by `Nomad Coders`
 
-### Frontend
+## Fontend
 
-### Backend
+- In Progress ...
 
-- prisma
+## Backend
 
-- apollo-server
+### Environment Variables
 
-- graphql-tools
-
-## Environment Variable
-
-### Installation
-
-- Create `.env` file in your project root folder
-
-### `.env` Contents
-
-- `DATABASE_URL`: This is required to connect `postgresql` to Prisma
+- `DATABASE_URL`: This is required to connect `postgresql` to `prisma`
+- `PORT`: Sever port number
+- `SALT`: Password hash salt
+- `SECRET`: Secret for Json Web Token(JWT)

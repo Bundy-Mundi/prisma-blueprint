@@ -1,4 +1,4 @@
-import {gql} from "apollo-server";
+import {gql} from "apollo-server-express";
 
 export const typeDefs = gql`
   type User {
@@ -8,6 +8,8 @@ export const typeDefs = gql`
     username  : String!
     email     : String!
     password  : String
+    bio       : String
+    avatar    : String
     createdAt : String!
     updatedAt : String!
   }
