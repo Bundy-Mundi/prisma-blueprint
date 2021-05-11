@@ -1,5 +1,7 @@
 # Instagram Clone 3.0
 
+## This project is inspired by `Nomad Coders`
+
 ## Fontend
 
 - In Progress ...
