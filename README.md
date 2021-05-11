@@ -1,14 +1,33 @@
 # Prisma Blueprint
 
-## This project is inspired by `Nomad Coders`
+## Stacks
 
-## Fontend
+- Typescript
+- Prisma
+- Postgresql
+- GraphQL
 
-- In Progress ...
+## Installation
 
-## Backend
+```
+git clone https://github.com/Bundy-Mundi/prisma-blueprint.git <PROJECT_NAME>
 
-### Environment Variables
+cd PROJECT_NAME
+
+npm install
+```
+
+## Commands
+
+... Coming soon
+
+## Environment Variables
+
+### Frontend
+
+... Coming soon
+
+### Backend
 
 - `DATABASE_URL`: This is required to connect `postgresql` to `prisma`
 - `PORT`: Sever port number
