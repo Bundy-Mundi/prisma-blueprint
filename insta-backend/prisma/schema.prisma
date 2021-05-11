@@ -20,6 +20,8 @@ model User {
   token     String?
   bio       String?
   avatar    String?
+  followers User[]  @relation("FollowRelation", references: [id]) // Same relation name creates 
+  following User[]  @relation("FollowRelation", references: [id])
   user      Photo[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
